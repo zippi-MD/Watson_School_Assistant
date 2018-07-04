@@ -155,6 +155,8 @@ var ConversationPanel = (function() {
 
   // Constructs new DOM element from a message payload
   function buildMessageDomElements(newPayload, isUser) {
+
+    var conditions = newPayload.context;
     var textArray = isUser ? newPayload.input.text : newPayload.output.text;
     if (Object.prototype.toString.call( textArray ) !== '[object Array]') {
       textArray = [textArray];
