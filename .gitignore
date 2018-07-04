@@ -6,3 +6,6 @@ coverage
 .env
 npm-debug.log
 .jshintrc
+
+userInfo/classes.js
+userInfo/assigments.js

@@ -26,6 +26,10 @@ var app = express();
 app.use(express.static('./public')); // load UI from public folder
 app.use(bodyParser.json());
 
+// Information
+const {classes, nextClass, nextClasses} = require('./userInfo/classes');
+const {assigments, pendingAssigments, newAssigment} = require('./userInfo/assigments');
+
 // Create the service wrapper
 
 var assistant;
@@ -68,6 +72,22 @@ app.post('/api/message', function (req, res) {
     }
     return res.json(updateMessage(payload, data));
   });
+});
+
+app.get('/user/classes', (req, res) => {
+  nextClass(10);
+  nextClasses(10);
+  res.status(200).send(classes);
+});
+
+app.get('/user/assigments', (req, res) => {
+  pendingAssigments(10);
+  res.status(200).send(assigments);
+});
+
+app.post('/user/assigment', (req, res) => {
+  newAssigment('tarea', 'Esta es otra tarea', '10/20/18');
+  res.status(200)
 });
 
 /**
