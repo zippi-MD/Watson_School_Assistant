@@ -1,7 +1,5 @@
 # Watson School Assistant
-Proyecto para IBM Ambassadors
-
-Manuel Alejandro Mendoza Domínguez
+**Proyecto para IBM Ambassadors   -   Manuel Alejandro Mendoza Domínguez**
 
 
 Watson School Assistant es un bot que utiliza diferentes herramientas que ofrece la nube de IBM para
@@ -9,10 +7,10 @@ facilitarle a los estudiantes ciertas tareas cotidianas.
 
 ![alt text](readme_images/WSA_basic.gif)
 
-[Aquí](https://school-smart-assistant.mybluemix.net)se puede acceder al servició o se puede buscar 
+[Aquí](https://school-smart-assistant.mybluemix.net) se puede acceder al servició o se puede buscar 
 como bot en telegram.
 
-![alt text](readme_images/WSA_telegram.jpeg)
+![alt text](readme_images/WSA_telegramInit.gif)
 
 
 Watson School Assistant utiliza los siguientes serviciós de la nube de IBM para funcionar correctamente:
@@ -57,3 +55,7 @@ cómoda y sencilla.
 Al hacer la conexión con Telegram también se pueden enviar notificaciones al usuario, 
 actualmente se utilizan para mandarle un mensaje a las '7:40 am' con los pendientes
 que tiene.
+
+> El bot se puede encontrar en telegram como watson_school_bot o en el siguiente [link](t.me/watson_school_bot)
+
+![alt text](readme_images/WSA_telegramNotifications.gif)
