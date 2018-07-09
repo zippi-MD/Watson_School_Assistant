@@ -337,7 +337,10 @@ var ConversationPanel = (function() {
           });
 
           if(response.length === 0){
-              return "No tienes ningún pendiente!!!";
+              const answer = "No tienes ningún pendiente!!!";
+              payload.output.text = [answer];
+              displayMessage(payload, 'watson');
+              return
           }
           var assigments = '<ul>';
           for(var counter = 0; counter < response.length; counter++){
