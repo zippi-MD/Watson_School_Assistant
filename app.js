@@ -1,36 +1,21 @@
-/**
- * Copyright 2015 IBM Corp. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 'use strict';
 
-var express = require('express'); // app server
-var bodyParser = require('body-parser'); // parser for post requests
-var AssistantV1 = require('watson-developer-cloud/assistant/v1'); // watson sdk
+var express = require('express');
+var bodyParser = require('body-parser');
+var AssistantV1 = require('watson-developer-cloud/assistant/v1');
 
 var app = express();
 
-// Bootstrap application settings
-app.use(express.static('./public')); // load UI from public folder
+
+app.use(express.static('./public'));
 app.use(bodyParser.json());
 
-// Information
+
 const {classes, nextClass, nextClasses} = require('./userInfo/classes');
 const {assigments, pendingAssigments, newAssigment} = require('./userInfo/assigments');
 
-// Create the service wrapper
+
 
 var assistant;
 
@@ -49,7 +34,7 @@ if (process.env.ASSISTANT_IAM_APIKEY !== undefined && process.env.ASSISTANT_IAM_
   });
 }
 
-// Endpoint to be call from the client side
+
 app.post('/api/message', function (req, res) {
   var workspace = process.env.WORKSPACE_ID || '<workspace-id>';
   if (!workspace || workspace === '<workspace-id>') {
@@ -65,7 +50,7 @@ app.post('/api/message', function (req, res) {
     input: req.body.input || {}
   };
 
-  // Send the input to the assistant service
+
   assistant.message(payload, function (err, data) {
     if (err) {
       return res.status(err.code || 500).json(err);
@@ -75,27 +60,28 @@ app.post('/api/message', function (req, res) {
 });
 
 app.get('/user/classes', (req, res) => {
-  nextClass(10);
-  nextClasses(10);
-  res.status(200).send(classes);
+  res.status(200).send(nextClasses());
+});
+
+app.get('/user/class', (req, res) => {
+  res.status(200).send(nextClass());
 });
 
 app.get('/user/assigments', (req, res) => {
-  pendingAssigments(10);
-  res.status(200).send(assigments);
+
+  res.status(200).send(pendingAssigments());
 });
 
 app.post('/user/assigment', (req, res) => {
-  newAssigment('tarea', 'Esta es otra tarea', '10/20/18');
-  res.status(200)
+  newAssigment(req.body.info, req.body.dueDate);
+  res.status(200).send();
 });
 
-/**
- * Updates the response text using the intent confidence
- * @param  {Object} input The request to the Assistant service
- * @param  {Object} response The response from the Assistant service
- * @return {Object}          The response with the updated message
- */
+app.get('/date', (req, res) => {
+  res.status(200).send(new Date());
+});
+
+
 function updateMessage(input, response) {
   var responseText = null;
   if (!response.output) {
@@ -105,11 +91,7 @@ function updateMessage(input, response) {
   }
   if (response.intents && response.intents[0]) {
     var intent = response.intents[0];
-    // Depending on the confidence of the response the app can return different messages.
-    // The confidence will vary depending on how well the system is trained. The service will always try to assign
-    // a class/intent to the input. If the confidence is low, then it suggests the service is unsure of the
-    // user's intent . In these cases it is usually best to return a disambiguation message
-    // ('I did not understand your intent, please rephrase your question', etc..)
+
     if (intent.confidence >= 0.75) {
       responseText = 'I understood your intent was ' + intent.intent;
     } else if (intent.confidence >= 0.5) {

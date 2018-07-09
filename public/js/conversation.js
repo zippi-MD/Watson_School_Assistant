@@ -1,7 +1,4 @@
-// The ConversationPanel module is designed to handle
-// all display and behaviors of the conversation column of the app.
-/* eslint no-unused-vars: "off" */
-/* global Api: true, Common: true*/
+
 
 var ConversationPanel = (function() {
   var settings = {
@@ -17,20 +14,57 @@ var ConversationPanel = (function() {
     }
   };
 
-  // Publicly accessible methods defined
+    var payload = {
+        "intents": [],
+        "entities": [],
+        "input": {},
+        "output": {
+            "text": [],
+            "nodes_visited": ["Bienvenido"],
+            "log_messages": []
+        },
+        "context": {
+            "conversation_id": "3943bf43-282c-4cb1-b878-ed562ed7bf6b",
+            "system": {
+                "dialog_stack": [{
+                    "dialog_node": "root"
+                }],
+                "dialog_turn_counter": 1,
+                "dialog_request_counter": 1,
+                "_node_output_map": {
+                    "Bienvenido": [0]
+                },
+                "branch_exited": true,
+                "branch_exited_reason": "completed"
+            },
+            "clase": false,
+            "tarea": false,
+            "clases": false,
+            "tareas": false,
+            "proyecto": false,
+            "proyectos": false
+        }
+    };
+
+    var assigment = {
+        info: undefined,
+        dueDate: undefined
+    };
+
+
+
   return {
     init: init,
     inputKeyDown: inputKeyDown
   };
 
-  // Initialize the module
+
   function init() {
     chatUpdateSetup();
     Api.sendRequest( '', null );
     setupInputBox();
   }
-  // Set up callbacks on payload setters in Api module
-  // This causes the displayMessage function to be called when messages are sent / received
+
   function chatUpdateSetup() {
     var currentRequestPayloadSetter = Api.setRequestPayload;
     Api.setRequestPayload = function(newPayloadStr) {
@@ -45,10 +79,7 @@ var ConversationPanel = (function() {
     };
   }
 
-// Set up the input box to underline text as it is typed
-  // This is done by creating a hidden dummy version of the input box that
-  // is used to determine what the width of the input text should be.
-  // This value is then used to set the new width of the visible input box.
+
   function setupInputBox() {
     var input = document.getElementById('textInput');
     var dummy = document.getElementById('textInputDummy');
@@ -57,7 +88,7 @@ var ConversationPanel = (function() {
     var minPadding = 4;
     var maxPadding = 6;
 
-    // If no dummy input box exists, create one
+
     if (dummy === null) {
       var dummyJson = {
         'tagName': 'div',
@@ -73,13 +104,12 @@ var ConversationPanel = (function() {
 
     function adjustInput() {
       if (input.value === '') {
-        // If the input box is empty, remove the underline
+
         input.classList.remove('underline');
         input.setAttribute('style', 'width:' + '100%');
         input.style.width = '100%';
       } else {
-        // otherwise, adjust the dummy text to match, and then set the width of
-        // the visible input box to match it (thus extending the underline)
+
         input.classList.add('underline');
         var txtNode = document.createTextNode(input.value);
         ['font-size', 'font-style', 'font-weight', 'font-family', 'line-height',
@@ -104,27 +134,28 @@ var ConversationPanel = (function() {
       }
     }
 
-    // Any time the input changes, or the window resizes, adjust the size of the input box
+
     input.addEventListener('input', adjustInput);
     window.addEventListener('resize', adjustInput);
 
-    // Trigger the input event once to set up the input box and dummy element
+
     Common.fireEvent(input, 'input');
   }
 
-  // Display a user or Watson message that has just been sent/received
+
   function displayMessage(newPayload, typeValue) {
+    analyzePayload(newPayload, typeValue);
     var isUser = isUserMessage(typeValue);
     var textExists = (newPayload.input && newPayload.input.text)
       || (newPayload.output && newPayload.output.text);
     if (isUser !== null && textExists) {
-      // Create new message DOM element
+
       var messageDivs = buildMessageDomElements(newPayload, isUser);
       var chatBoxElement = document.querySelector(settings.selectors.chatBox);
       var previousLatest = chatBoxElement.querySelectorAll((isUser
               ? settings.selectors.fromUser : settings.selectors.fromWatson)
               + settings.selectors.latest);
-      // Previous "latest" message is no longer the most recent
+
       if (previousLatest) {
         Common.listForEach(previousLatest, function(element) {
           element.classList.remove('latest');
@@ -133,17 +164,15 @@ var ConversationPanel = (function() {
 
       messageDivs.forEach(function(currentDiv) {
         chatBoxElement.appendChild(currentDiv);
-        // Class to start fade in animation
+
         currentDiv.classList.add('load');
       });
-      // Move chat to the most recent messages when new messages are added
+
       scrollToChatBottom();
     }
   }
 
-  // Checks if the given typeValue matches with the user "name", the Watson "name", or neither
-  // Returns true if user, false if Watson, and null if neither
-  // Used to keep track of whether a message was from the user or Watson
+
   function isUserMessage(typeValue) {
     if (typeValue === settings.authorTypes.user) {
       return true;
@@ -153,32 +182,28 @@ var ConversationPanel = (function() {
     return null;
   }
 
-  // Constructs new DOM element from a message payload
-  function buildMessageDomElements(newPayload, isUser) {
+  function isNotUserMessage(typeValue) {
+      return !isUserMessage(typeValue);
+  }
 
-    var conditions = newPayload.context;
+  function buildMessageDomElements(newPayload, isUser) {
     var textArray = isUser ? newPayload.input.text : newPayload.output.text;
     if (Object.prototype.toString.call( textArray ) !== '[object Array]') {
       textArray = [textArray];
     }
     var messageArray = [];
-
     textArray.forEach(function(currentText) {
       if (currentText) {
         var messageJson = {
-          // <div class='segments'>
           'tagName': 'div',
           'classNames': ['segments'],
           'children': [{
-            // <div class='from-user/from-watson latest'>
             'tagName': 'div',
             'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')],
             'children': [{
-              // <div class='message-inner'>
               'tagName': 'div',
               'classNames': ['message-inner'],
               'children': [{
-                // <p>{messageText}</p>
                 'tagName': 'p',
                 'text': currentText
               }]
@@ -188,19 +213,14 @@ var ConversationPanel = (function() {
         messageArray.push(Common.buildDomElement(messageJson));
       }
     });
-
     return messageArray;
   }
 
-  // Scroll to the bottom of the chat window (to the most recent messages)
-  // Note: this method will bring the most recent user message into view,
-  //   even if the most recent message is from Watson.
-  //   This is done so that the "context" of the conversation is maintained in the view,
-  //   even if the Watson message is long.
+
+
   function scrollToChatBottom() {
     var scrollingChat = document.querySelector('#scrollingChat');
 
-    // Scroll to the latest message sent by the user
     var scrollEl = scrollingChat.querySelector(settings.selectors.fromUser
             + settings.selectors.latest);
     if (scrollEl) {
@@ -208,23 +228,148 @@ var ConversationPanel = (function() {
     }
   }
 
-  // Handles the submission of input
   function inputKeyDown(event, inputBox) {
-    // Submit on enter key, dis-allowing blank messages
+
     if (event.keyCode === 13 && inputBox.value) {
-      // Retrieve the context from the previous server response
+
       var context;
       var latestResponse = Api.getResponsePayload();
       if (latestResponse) {
         context = latestResponse.context;
       }
 
-      // Send the user message
       Api.sendRequest(inputBox.value, context);
 
-      // Clear input box for further messages
       inputBox.value = '';
       Common.fireEvent(inputBox, 'input');
     }
   }
+
+    function analyzePayload(payLoad, typeValue) {
+        const conditions = payLoad.context;
+        if(conditions.clase && isNotUserMessage(typeValue)) {
+            getNextClass()
+        }
+        if(conditions.clases && isNotUserMessage(typeValue)){
+          getNextClasses()
+        }
+        if(conditions.entregas && isNotUserMessage(typeValue)){
+          getPendingAssigments();
+        }
+        if(conditions.info && isNotUserMessage(typeValue)){
+
+          assigment.info = payLoad.input.text
+        }
+        if(conditions.fecha && isNotUserMessage(typeValue)){
+
+          assigment.dueDate = payLoad.input.text;
+            postNewAssigment()
+        }
+    };
+
+    function getNextClass() {
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://school-smart-assistant.mybluemix.net/user/class",
+            "method": "GET",
+            "headers": {
+                "Cache-Control": "no-cache",
+                "Postman-Token": "1df7431d-45c6-4504-bbdb-78685544b950"
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+          payload.output.text = [response];
+          displayMessage(payload, 'watson');
+
+        });
+
+    }
+
+    function getNextClasses() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://school-smart-assistant.mybluemix.net/user/classes",
+            "method": "GET",
+            "headers": {
+                "Cache-Control": "no-cache",
+                "Postman-Token": "7d46d15c-2c49-49b1-8c53-e7e90db8cdaf"
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            if(response.length === 0){
+              payload.output.text = ['No tienes ningun pendiente!!!'];
+                displayMessage(payload, 'watson');
+            }
+            var classesList = '<ul>';
+            for(var counter = 0; counter < response.length; counter++){
+              const actualElement = response[counter];
+              classesList += '<li>' + actualElement.name + '<br>' + actualElement.starts + ' - ' + actualElement.ends +
+                              ' hrs' + '<br>' + actualElement.classRoom + '</li><br>';
+            }
+            classesList += '</ul>';
+
+            payload.output.text = [classesList];
+            displayMessage(payload, 'watson');
+        });
+    }
+
+    function getPendingAssigments() {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://school-smart-assistant.mybluemix.net/user/assigments",
+            "method": "GET",
+            "headers": {
+                "Cache-Control": "no-cache",
+                "Postman-Token": "336a597f-6249-431f-9b74-cbc96737556f"
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+          response = response.map((assigment) => {
+            assigment.dueDate = assigment.dueDate.split('/').reverse().join('/');
+            return assigment
+          });
+
+          var assigments = '<ul>';
+          for(var counter = 0; counter < response.length; counter++){
+            const actualElement = response[counter];
+            assigments += '<li>' + actualElement.dueDate + '  -  ' + actualElement.info + '</li><br>';
+          }
+          assigments += '</ul>';
+
+            payload.output.text = [assigments];
+            displayMessage(payload, 'watson');
+        });
+    }
+
+    function postNewAssigment(){
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://school-smart-assistant.mybluemix.net/user/assigment",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
+                "Postman-Token": "c5060c32-f083-478c-ab68-adc090fd8a3c"
+            },
+            "processData": false,
+            "data": JSON.stringify(assigment)
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log('Assigment correctly added.');
+        });
+
+        assigment.info = undefined;
+        assigment.dueDate = undefined;
+    }
+
 }());
