@@ -7,10 +7,7 @@ facilitarle a los estudiantes ciertas tareas cotidianas.
 
 ![alt text](readme_images/WSA_basic.gif)
 
-[Aquí](https://school-smart-assistant.mybluemix.net) se puede acceder al servició o se puede buscar 
-como bot en telegram.
-
-![alt text](readme_images/WSA_telegramInit.gif)
+[Aquí](https://school-smart-assistant.mybluemix.net) se puede acceder al servició.
 
 
 Watson School Assistant utiliza los siguientes serviciós de la nube de IBM para funcionar correctamente:
@@ -25,7 +22,7 @@ Watson School Assistant utiliza los siguientes serviciós de la nube de IBM para
 Se utiliza la tecnología de Watson Assistant para poder entender correctamente lo que le esta solicitando 
 el usuario al bot.
 
-Para poder hacer esto se ha entrenado un modelo para reaccionar correctamente a diferentes '#intents' y responder 
+Para poder hacer esto se ha entrenado un modelo para reaccionar correctamente a diferentes 'intents' y responder 
 de manera correcta al usuario siguiendo un 'dialog' con diferentes respuestas.
 
 
@@ -41,6 +38,8 @@ Se desarrollo un servidor con Node JS para poder brindar el servicio en la WEB (
 [aquí](https://school-smart-assistant.mybluemix.net)), así como para almacenar la información del usuario (clases y
  tareas pendientes) y responder con información correcta y actualizada a las solicitudes del usuario.
  
+ Este servidor puede responder a diferentes metodos GET y POST para obtener y brindar la información necesaria.
+ 
  > El codigo de este servidor se encuentra en 'app.js'
  
 
@@ -48,7 +47,7 @@ Se desarrollo un servidor con Node JS para poder brindar el servicio en la WEB (
 
 ![alt text](readme_images/WSA_nodeRed.gif)
 
-Se utilizo Node-Red para poder hacer la conexión del bot con Telegram y permitirle
+Se utilizo Node-Red (se puede encontrar en el siguiente [link](https://watson-assistant-school-iot.mybluemix.net/)) para poder hacer la conexión del bot con Telegram y permitirle
 a los usuarios utilizar a Watson School Assistant desde su celular de una manera más 
 cómoda y sencilla.
 
@@ -56,6 +55,6 @@ Al hacer la conexión con Telegram también se pueden enviar notificaciones al u
 actualmente se utilizan para mandarle un mensaje a las '7:40 am' con los pendientes
 que tiene.
 
-> El bot se puede encontrar en telegram como watson_school_bot o en el siguiente [link](t.me/watson_school_bot)
+> El bot se puede encontrar en telegram como watson_school_bot o en el siguiente [link](https://t.me/watson_school_bot)
 
 ![alt text](readme_images/WSA_telegramNotifications.gif)
