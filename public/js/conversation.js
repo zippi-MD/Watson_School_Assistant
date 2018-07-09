@@ -336,6 +336,9 @@ var ConversationPanel = (function() {
             return assigment
           });
 
+          if(response.length === 0){
+              return "No tienes ningún pendiente!!!";
+          }
           var assigments = '<ul>';
           for(var counter = 0; counter < response.length; counter++){
             const actualElement = response[counter];
