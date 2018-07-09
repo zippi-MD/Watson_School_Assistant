@@ -21,7 +21,7 @@ Watson School Assistant utiliza los siguientes serviciós de la nube de IBM para
 3. Servidor con tecnología Node-Red alojado con Cloud Foundry
 
 
-##Watson Assistant
+## Watson Assistant
 ![alt text](readme_images/WSA_Assistant.gif)
 
 Se utiliza la tecnología de Watson Assistant para poder entender correctamente lo que le esta solicitando 
@@ -37,7 +37,7 @@ de manera correcta al usuario siguiendo un 'dialog' con diferentes respuestas.
 ![alt text](readme_images/WSA_dialog.png)
 
 
-##Servidor Node JS
+## Servidor Node JS
 
 Se desarrollo un servidor con Node JS para poder brindar el servicio en la WEB (como se puede ver
 [aquí](https://school-smart-assistant.mybluemix.net)), así como para almacenar la información del usuario (clases y
@@ -46,7 +46,7 @@ Se desarrollo un servidor con Node JS para poder brindar el servicio en la WEB (
  > El codigo de este servidor se encuentra en 'app.js'
  
 
-##Servidor Node-Red
+## Servidor Node-Red
 
 ![alt text](readme_images/WSA_nodeRed.gif)
 
