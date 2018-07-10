@@ -12,8 +12,20 @@ facilitarle a los estudiantes ciertas tareas cotidianas.
 
 Watson School Assistant utiliza los siguientes serviciós de la nube de IBM para funcionar correctamente:
 1. Watson Assistant
-2. Servidor con tecnología Node JS alojado con Cloud Foundry
-3. Servidor con tecnología Node-Red alojado con Cloud Foundry
+2. Aplicación Node JS alojado con Cloud Foundry
+3. Aplicación Node-Red alojado con Cloud Foundry
+
+Watson School Assistant puede responer preguntas como:
+* ¿Qué clases me tocan hoy?
+* ¿Que clase me toca después?
+* ¿Tengo algún pendiente?
+
+También puede realizar acciones como:
+* Avisarte a cierta hora de tareas pendientes
+* Agregar una tarea o proyecto a tu lista de pendientes
+* Decirte en que salón te tocan tus clases
+
+En este [link](https://youtu.be/ezGPoh2OgDs) se puede ver un video sobre como funciona el proyecto.
 
 
 ## Watson Assistant
